@@ -17,7 +17,8 @@ package easypki
 
 import (
 	"crypto/rand"
-	"crypto/rsa"
+	"crypto/ecdsa"
+	"crypto/elliptic"
 	"crypto/x509"
 	"errors"
 	"fmt"
@@ -28,7 +29,7 @@ import (
 )
 
 const (
-	defaultPrivateKeySize = 2048
+	defaultPrivateKeySize = 384
 )
 
 // Signing errors.
@@ -80,7 +81,17 @@ func (e *EasyPKI) Sign(signer *certificate.Bundle, req *Request) error {
 	if req.PrivateKeySize == 0 {
 		req.PrivateKeySize = defaultPrivateKeySize
 	}
-	privateKey, err := rsa.GenerateKey(rand.Reader, req.PrivateKeySize)
+
+	var curve elliptic.Curve
+	if req.PrivateKeySize == 384 {
+		curve = elliptic.P384()
+	} else if req.PrivateKeySize == 256 {
+		curve = elliptic.P256()
+	} else {
+		return fmt.Errorf("illegal key size")
+	}
+
+	privateKey, err := ecdsa.GenerateKey(curve, rand.Reader)
 	if err != nil {
 		return fmt.Errorf("failed generating private key: %v", err)
 	}
@@ -114,7 +125,12 @@ func (e *EasyPKI) Sign(signer *certificate.Bundle, req *Request) error {
 		return fmt.Errorf("failed creating and signing certificate: %v", err)
 	}
 
-	if err := e.Store.Add(signer.Name, req.Name, req.Template.IsCA, x509.MarshalPKCS1PrivateKey(privateKey), rawCert); err != nil {
+	k, err := x509.MarshalECPrivateKey(privateKey)
+	if err != nil {
+		return fmt.Errorf("failed to create ec private key: %v", err)
+	}
+
+	if err := e.Store.Add(signer.Name, req.Name, req.Template.IsCA, k, rawCert); err != nil {
 		return fmt.Errorf("failed saving generated bundle: %v", err)
 	}
 	return nil
