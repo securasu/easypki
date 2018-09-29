@@ -158,7 +158,7 @@ func (r *router) run() {
 	app.Usage = "Manage pki"
 	app.Author = "Jeremy Clerc"
 	app.Email = "jeremy@clerc.io"
-	app.Version = "1.0.0"
+	app.Version = "1.1.0"
 
 	caNameFlag := cli.StringFlag{
 		Name:  "ca-name",
@@ -227,8 +227,8 @@ func (r *router) run() {
 				},
 				cli.IntFlag{
 					Name:  "private-key-size",
-					Usage: "size of the private key (default: 2048)",
-					Value: 2048,
+					Usage: "size of the private key (default: 384)",
+					Value: 384,
 				},
 				cli.StringFlag{
 					Name:  "filename",
