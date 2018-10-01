@@ -29,9 +29,9 @@ import (
 	"encoding/pem"
 
 	"github.com/codegangsta/cli"
-	"github.com/google/easypki/pkg/certificate"
-	"github.com/google/easypki/pkg/easypki"
-	"github.com/google/easypki/pkg/store"
+	"github.com/securasu/easypki/pkg/certificate"
+	"github.com/securasu/easypki/pkg/easypki"
+	"github.com/securasu/easypki/pkg/store"
 )
 
 const (

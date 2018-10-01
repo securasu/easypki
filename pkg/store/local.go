@@ -29,7 +29,7 @@ import (
 
 	"crypto/x509"
 
-	"github.com/google/easypki/pkg/certificate"
+	"github.com/securasu/easypki/pkg/certificate"
 )
 
 // Predifined directory names.

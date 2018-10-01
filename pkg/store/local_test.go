@@ -24,7 +24,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/google/easypki/pkg/certificate"
+	"github.com/securasu/easypki/pkg/certificate"
 )
 
 var (
