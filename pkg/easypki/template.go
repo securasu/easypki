@@ -27,7 +27,8 @@ import (
 )
 
 func defaultTemplate(genReq *Request, publicKey crypto.PublicKey) error {
-	publicKeyBytes := elliptic.Marshal(publicKey.(*ecdsa.PublicKey).Curve, publicKey.(*ecdsa.PublicKey).X, publicKey.(*ecdsa.PublicKey).Y)
+	ecPublicKey := publicKey.(*ecdsa.PublicKey)
+	publicKeyBytes := elliptic.Marshal(ecPublicKey.Curve, ecPublicKey.X, ecPublicKey.Y)
 	subjectKeyID := sha1.Sum(publicKeyBytes)
 	genReq.Template.SubjectKeyId = subjectKeyID[:]
 
